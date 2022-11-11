@@ -2,36 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack : Entity
 {
-    Attack standardAttack = new Attack();
 
     [SerializeField]
     float range;
 
-    Vector3 checkBox = new Vector3();
-
-    Transform trueFacing;
-
     public Weapon equippedWeapon;
+
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        trueFacing = transform.GetChild(0);
         equippedWeapon = Weapons.equippedWeapons[0];
+        currentHealth = Health;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.R) && !equippedWeapon.isReloading && (equippedWeapon.ammoCapacity != equippedWeapon.ammoUsed))
         {
             Weapons.equippedWeapons[0].Reload();
         }
         if (Input.GetKeyDown(KeyCode.Mouse0) && !equippedWeapon.isReloading)
         {
-            equippedWeapon.Fire(transform.position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << 9));
+
+            Vector3 point = hit.point;
+            point.y = transform.position.y;
+            equippedWeapon.Fire(transform.position, point);
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -39,4 +43,17 @@ public class PlayerAttack : MonoBehaviour
             equippedWeapon = Weapons.equippedWeapons[0];
         }
     }
+
+    public override void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Application.Quit();
+            // Die
+            // Drop Loot
+        }
+    }
+
 }

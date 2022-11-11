@@ -2,33 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoreEnemy : MonoBehaviour
+public class CoreEnemy : Entity
 {
-    public int maxHealth;
+    public int weaponIndex;
 
-    int currentHealth;
+    Weapon weapon;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = Health;
+        weapon = new Weapon(Weapons.weaponList[weaponIndex]);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        transform.LookAt(GameManager.player.transform);
+        weapon.Update();
+        weapon.Fire(transform.position, GameManager.player.transform.position);
     }
 
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
-        {
-            Destroy(gameObject);
-           // Die
-           // Drop Loot
-        }
-    }
+    
 }

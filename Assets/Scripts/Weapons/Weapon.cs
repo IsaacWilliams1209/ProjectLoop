@@ -29,7 +29,19 @@ public class Weapon
         weaponType = wEAPONTYPE;
     }
 
-    public void Fire(Vector3 position)
+    public Weapon(Weapon baseWeapon)
+    {
+        ammoUsed = 0;
+        name = baseWeapon.name;
+        damage = baseWeapon.damage;
+        accuracy = baseWeapon.accuracy;
+        ammoCapacity = baseWeapon.ammoCapacity;
+        RoF = baseWeapon.RoF;
+        reloadSpeed = baseWeapon.reloadSpeed;
+        weaponType = baseWeapon.weaponType;
+    }
+
+    public void Fire(Vector3 position, Vector3 direction)
     {
         if (ammoUsed == ammoCapacity)
         {
@@ -37,15 +49,9 @@ public class Weapon
             return;
         }
         if (timers[1] <= 0)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << 9));
+        {           
 
-            Vector3 point = hit.point;
-            point.y = position.y;
-
-            Vector3 shotDir = (point - position).normalized;
+            Vector3 shotDir = (direction - position).normalized;
 
             Debug.DrawRay(position, shotDir, Color.white, 0.5f);
 

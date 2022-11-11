@@ -16,6 +16,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     CharacterController controller;
 
+    Vector3 previousMovment;
+
+    public bool isInvulnerable;
+
+    int iFrames;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +31,25 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            // Roll
+            if (!isInvulnerable)
+            {
+                isInvulnerable = true;
+                iFrames = 60;
+            }
+        }
+        if (iFrames > 0)
+        {
+            iFrames--;
+            controller.Move(previousMovment * 1.5f);
+            return;
+        }
+        else
+        {
+            isInvulnerable = false;
+        }
         Vector3 movement = Vector3.zero;
 
         movement += transform.forward * Input.GetAxis("Vertical") * speed * Time.deltaTime;
@@ -38,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
             mesh.transform.rotation = Quaternion.RotateTowards(mesh.transform.rotation, lookRotaion, rotationSpeed * Time.deltaTime);
         }
+        previousMovment = movement;
     }
 
 }

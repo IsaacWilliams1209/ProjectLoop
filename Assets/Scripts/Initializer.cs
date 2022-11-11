@@ -12,6 +12,7 @@ public class Initializer : MonoBehaviour
     {
         GameManager.bullet = bullet;
         GameManager.rand = new Random();
+        GameManager.player = GameObject.Find("Player").GetComponent<PlayerAttack>();
         Weapons.Initialize();
     }
 

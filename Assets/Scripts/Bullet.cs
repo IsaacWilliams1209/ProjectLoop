@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     public float life = 5;
     public float speed = 10;
     public int damage = 20;
+
     private void Update()
     {
         transform.position += transform.forward * speed * Time.deltaTime;
@@ -20,11 +21,15 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger Entered");
+        if (other.gameObject.layer == 11)
+        {
+            return;
+        }
         if (other.gameObject.layer == 8 || other.gameObject.layer == 10)
         {
             Debug.Log("An entity was hit");
             Debug.Log(other.name);
-            other.gameObject.GetComponent<CoreEnemy>().TakeDamage(damage);
+            other.gameObject.GetComponent<Entity>().TakeDamage(damage);
         }
         Destroy(gameObject);
     }
