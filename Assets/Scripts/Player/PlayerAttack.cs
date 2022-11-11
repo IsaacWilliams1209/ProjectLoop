@@ -22,7 +22,9 @@ public class PlayerAttack : Entity
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (gameObject.GetComponent<PlayerMovement>().isInvulnerable)
+            return;
         if (Input.GetKeyDown(KeyCode.R) && !equippedWeapon.isReloading && (equippedWeapon.ammoCapacity != equippedWeapon.ammoUsed))
         {
             Weapons.equippedWeapons[0].Reload();
@@ -46,6 +48,8 @@ public class PlayerAttack : Entity
 
     public override void TakeDamage(int damage)
     {
+        if (gameObject.GetComponent<PlayerMovement>().isInvulnerable)
+            return;
         currentHealth -= damage;
 
         if (currentHealth <= 0)

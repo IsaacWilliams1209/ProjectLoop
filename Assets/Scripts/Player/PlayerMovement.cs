@@ -37,13 +37,13 @@ public class PlayerMovement : MonoBehaviour
             if (!isInvulnerable)
             {
                 isInvulnerable = true;
-                iFrames = 60;
+                iFrames = 120;
             }
         }
         if (iFrames > 0)
         {
             iFrames--;
-            controller.Move(previousMovment * 1.5f);
+            controller.Move(previousMovment * 2f);
             return;
         }
         else
