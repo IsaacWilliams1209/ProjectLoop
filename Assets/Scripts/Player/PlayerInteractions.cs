@@ -11,6 +11,12 @@ public class PlayerInteractions : MonoBehaviour
         if (other.gameObject.layer == 12)
         {
             closestPickup = other.gameObject;
+            if (other.tag == "Armour")
+            {
+                GameManager.player.isArmoured = true;
+                closestPickup = null;
+                Destroy(other.gameObject);
+            }
         }
     }
 
@@ -40,4 +46,6 @@ public class PlayerInteractions : MonoBehaviour
 
     }
 }
+
+
 

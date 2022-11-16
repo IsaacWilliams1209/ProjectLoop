@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttack : Entity
 {
@@ -10,7 +11,13 @@ public class PlayerAttack : Entity
 
     public Weapon equippedWeapon;
 
-    
+    public GameObject healthDisplay;
+
+    public bool isArmoured;
+
+    float[] timer = new float[2]; // List of timers: 0. Out of Combat Checker; 1. Health Regeneration;
+
+    bool outOfCombat;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +29,16 @@ public class PlayerAttack : Entity
     // Update is called once per frame
     void Update()
     {
-
+        timer[0] -= Time.deltaTime;
+        if (timer[0] <= 0)
+        {
+            outOfCombat = true;
+            timer[0] = 0;
+        }
+        if (outOfCombat)
+        {
+            RegenerateHealth();
+        }
         if (gameObject.GetComponent<PlayerMovement>().isInvulnerable)
             return;
         if (Input.GetKeyDown(KeyCode.R) && !equippedWeapon.isReloading && (equippedWeapon.ammoCapacity != equippedWeapon.ammoUsed))
@@ -44,13 +60,18 @@ public class PlayerAttack : Entity
             Weapons.SwapWeapons();
             equippedWeapon = Weapons.equippedWeapons[0];
         }
+        healthDisplay.GetComponent<Text>().text = currentHealth.ToString();
     }
 
     public override void TakeDamage(int damage)
-    {
+    {        
         if (gameObject.GetComponent<PlayerMovement>().isInvulnerable)
             return;
+        timer[0] = 1f;
+        if (isArmoured)
+            damage /= 2;
         currentHealth -= damage;
+        
 
         if (currentHealth <= 0)
         {
@@ -60,4 +81,15 @@ public class PlayerAttack : Entity
         }
     }
 
+    void RegenerateHealth()
+    {
+        if (currentHealth % 20 == 0)
+            return;
+        timer[1] += Time.deltaTime;
+        if( timer[1] >= 0.5f)
+        {
+            timer[1] -= 0.5f;
+            currentHealth++;
+        }
+    }
 }

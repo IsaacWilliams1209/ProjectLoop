@@ -12,12 +12,7 @@ public class Entity : MonoBehaviour
 
     public virtual void TakeDamage(int damage)
     {
-        armour -= damage;
-        if (armour < 0)
-        {
-            currentHealth -= armour;
-            armour = 0;
-        }
+        currentHealth -= damage;
 
         if (currentHealth <= 0)
         {

@@ -19,6 +19,7 @@ public static class Weapons
     {
         weaponList.Add(new Weapon("Auto Rifle", 16, 75, 30, 2.5f, 0.15f, WEAPONTYPE.Autorifle));
         weaponList.Add(new Weapon("Pistol", 6, 95, 6, 1.5f, 0.25f, WEAPONTYPE.Pistol));
+        weaponList.Add(new Weapon("Sniper Rifle", 50, 100, 5, 4, 0.5f, WEAPONTYPE.Sniper));
         
         
 

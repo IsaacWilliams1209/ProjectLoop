@@ -6,17 +6,11 @@ public class WeaponPickup : MonoBehaviour
 {
     [HideInInspector]
     public Weapon weapon;
-    public string weaponName;
-    public int damage;
-    public int accuracy;
-    public float reloadSpeed;
-    public Weapons.WEAPONTYPE weaponType;
-    public int ammoCapacity;
-    public float RoF;
+    public int weaponIndex;
 
     private void Start()
     {
-        weapon = new Weapon(weaponName, damage, accuracy, ammoCapacity, reloadSpeed, RoF, weaponType);
+        weapon = new Weapon(Weapons.weaponList[weaponIndex]);
     }
 
     private void Update()
