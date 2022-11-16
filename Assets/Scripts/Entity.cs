@@ -8,9 +8,16 @@ public class Entity : MonoBehaviour
 
     protected int currentHealth;
 
+    public int armour;
+
     public virtual void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        armour -= damage;
+        if (armour < 0)
+        {
+            currentHealth -= armour;
+            armour = 0;
+        }
 
         if (currentHealth <= 0)
         {

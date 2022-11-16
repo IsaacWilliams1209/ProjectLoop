@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
 
     int iFrames;
 
+    float timer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,9 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        timer -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && timer < 0)
         {
             // Roll
             if (!isInvulnerable)
@@ -43,8 +47,13 @@ public class PlayerMovement : MonoBehaviour
         if (iFrames > 0)
         {
             iFrames--;
-            controller.Move(previousMovment * 2f);
+            controller.Move(transform.GetChild(0).forward* Time.deltaTime * speed * 2);
             return;
+        }
+        else if (iFrames == 0)
+        {
+            iFrames--;
+            timer = 0.5f; 
         }
         else
         {
