@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         if (iFrames > 0)
         {
             iFrames--;
-            controller.Move(transform.GetChild(0).forward* Time.deltaTime * speed * 2);
+            Move(transform.GetChild(0).forward* Time.deltaTime * speed * 2);
             return;
         }
         else if (iFrames == 0)
@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
         movement += transform.forward * Input.GetAxis("Vertical") * speed * Time.deltaTime;
         movement += transform.right * Input.GetAxis("Horizontal") * speed * Time.deltaTime;
 
-        controller.Move(movement);
+        Move(movement);
 
         if (movement != Vector3.zero)
         {
@@ -73,6 +73,53 @@ public class PlayerMovement : MonoBehaviour
             mesh.transform.rotation = Quaternion.RotateTowards(mesh.transform.rotation, lookRotaion, rotationSpeed * Time.deltaTime);
         }
         previousMovment = movement;
+    }
+
+    public void Move(Vector3 direction)
+    {
+        direction = CollisionCheck(direction);
+        transform.position += direction;
+    }
+
+    Vector3 CollisionCheck(Vector3 dir)
+    {
+        Vector3 l = transform.position - Vector3.up * 0.5f;
+
+        Ray ray = new Ray(l, dir);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 2) && !hit.collider.isTrigger)
+        {
+            if (hit.distance < 0.4f)
+            {
+                Vector3 temp = Vector3.Cross(hit.normal, dir);
+                Vector3 newDir = Vector3.Cross(temp, hit.normal);
+
+                RaycastHit wallCheck = CheckWall(newDir);
+                if (wallCheck.transform != null)
+                {
+                    newDir *= wallCheck.distance * 0.5f;
+                }
+
+                transform.position += newDir;
+                return Vector3.zero;
+            }
+        }
+        return dir;
+    }
+
+    RaycastHit CheckWall(Vector3 dir)
+    {
+        Vector3 l = transform.position - Vector3.up * 0.5f;
+        Ray ray = new Ray(l, dir);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 0.1f) && !hit.collider.isTrigger)
+        {
+            return hit;
+        }
+        return hit;
     }
 
 }

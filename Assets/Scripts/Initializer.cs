@@ -5,19 +5,23 @@ using UnityEngine;
 public class Initializer : MonoBehaviour
 {
     public GameObject bullet;
-    public PlayerAttack player;
+    //public PlayerAttack player;
+    [HideInInspector]
+    public RandomGen randomGen;
 
 
     private void Start()
     {
-        GameManager.bullet = bullet;
-        GameManager.rand = new Random();
-        GameManager.player = GameObject.Find("Player").GetComponent<PlayerAttack>();
-        Weapons.Initialize();
+        //GameManager.bullet = bullet;
+        //GameManager.player = GameObject.Find("Player").GetComponent<PlayerAttack>();
+        //Weapons.Initialize();
+        randomGen = new RandomGen();
+        randomGen.GenerateRooms();
+        
     }
 
     private void Update()
     {
-        Weapons.Update();
+        //Weapons.Update();
     }
 }

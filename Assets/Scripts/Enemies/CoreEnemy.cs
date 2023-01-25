@@ -26,7 +26,5 @@ public class CoreEnemy : Entity
         nav.SetDestination(GameManager.player.transform.position);
         weapon.Update();
         weapon.Fire(transform.position, GameManager.player.transform.position);
-    }
-
-    
+    }    
 }
